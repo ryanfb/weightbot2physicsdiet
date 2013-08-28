@@ -8,7 +8,7 @@ Usage
 
  * Install gems:
 
-        gem install mechanize fastercsv
+        bundle install
 
  * Copy `config.example.yml` to `config.yml` and modify with your account settings.
 

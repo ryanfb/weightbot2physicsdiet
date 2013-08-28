@@ -2,7 +2,7 @@
 
 require 'rubygems'
 require 'mechanize'
-require 'fastercsv'
+require 'csv'
 require 'date'
 require 'yaml'
 
@@ -39,12 +39,12 @@ login_form.field_with(:type => 'password').value = config['physicsdiet_password'
 physicsdiet_page = agent.submit(login_form, login_form.buttons.first)
 
 csv_page = agent.get('http://physicsdiet.com/FitnessLog.aspx?f=csv')
-physicsdiet_csv = FasterCSV.parse(csv_page.body, :headers => true)
+physicsdiet_csv = CSV.parse(csv_page.body, :headers => true)
 
 physicsdiet = {}
 
 physicsdiet_csv.each do |row|
-  date = Date.parse(row['Date'])
+  date = Date.strptime(row['Date'],"%m/%d/%Y")
   physicsdiet[date] = row[' Weight']
 end
 
@@ -59,7 +59,7 @@ page = agent.submit(weightbot_form, weightbot_form.buttons.first)
 export_form = page.forms_with(:action => '/export').first
 page = agent.submit(export_form, export_form.buttons.first)
 
-weightbot_csv = FasterCSV.parse(page.body, :headers => true)
+weightbot_csv = CSV.parse(page.body, :headers => true)
 
 weightbot = {}
 
